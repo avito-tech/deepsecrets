@@ -1,0 +1,80 @@
+[tool.poetry]
+name = "deepsecrets"
+version = "1.0.0"
+description = "A better tool for secrets search"
+license = "MIT"
+authors = [
+  "Nikolai Khechumov <khechumov@gmail.com>",
+]
+keywords = ["security", "secrets", "credentials", "scanning", "appsec"]
+packages = [{include = "deepsecrets"}]
+
+
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Topic :: Security"
+    
+]
+
+[tool.poetry.urls]
+"Homepage" = "https://github.com/avito-tech/deepsecrets"
+"Bug Tracker" = "https://github.com/avito-tech/deepsecrets/issues"
+
+
+[tool.poetry.dependencies]
+python = ">=3.9,<=3.11.1"
+pydantic = "^1.10.4"
+pyyaml = "^5.4.1"
+pygments = "^2.14.0"
+ordered-set = "^4.1.0"
+dotwiz = "^0.4.0"
+mmh3 = "^3.0.0"
+argparse = "^1.4.0"
+regex = "^2023.3.23"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.1"
+coverage = "^7.2.0"
+pytest-cov = "^4.0.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+packages=["deepsecrets"]
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+show_error_codes = true
+
+exclude = [
+  '^tests/*',  # TOML literal string (single-quotes, no escaping necessary)
+]
+plugins = [
+  "pydantic.mypy"
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
+
+[tool.black]
+line-length = 120
+skip-string-normalization = 1
+
+[tool.coverage]
+run.omit = ["deepsecrets/__main__.py"]
+

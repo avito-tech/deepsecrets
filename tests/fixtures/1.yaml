@@ -1,0 +1,6 @@
+---
+
+kubernetes::kube_kubeconfig_token: chAng3m3
+kubernetes::proxy_kubeconfig_token: chAng3m3
+kubernetes::kubelet_kubeconfig_token: chAng3m3
+kubernetes::calico_kubeconfig_token: chAng3m3

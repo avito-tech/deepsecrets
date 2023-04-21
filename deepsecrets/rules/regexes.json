@@ -1,0 +1,148 @@
+[
+    {
+        "id": "S0",
+        "name": "Slack Token",
+        "confidence": 9,
+        "pattern": "xox(?:a|b|p|o|s|r)-(?:\\d+-)+[a-z0-9]+"
+    },
+    {
+        "id": "S1",
+        "name": "RSA private key",
+        "confidence": 9,
+        "pattern": "-----BEGIN RSA PRIVATE KEY-----[\\S\\s]{15,}?-----END RSA PRIVATE KEY-----"
+    },
+    {
+        "id": "S2",
+        "name": "SSH (OPENSSH) private key",
+        "confidence": 9,
+        "pattern": "-----BEGIN OPENSSH PRIVATE KEY-----[\\S\\s]{15,}?-----END OPENSSH PRIVATE KEY-----"
+    },
+    {
+        "id": "S3",
+        "name": "SSH (DSA) private key",
+        "confidence": 9,
+        "pattern": "-----BEGIN DSA PRIVATE KEY-----[\\S\\s]{15,}?-----END DSA PRIVATE KEY-----"
+    },
+    {
+        "id": "S4",
+        "name": "SSH (EC) private key",
+        "confidence": 9,
+        "pattern": "-----BEGIN EC PRIVATE KEY-----[\\S\\s]{15,}?-----END EC PRIVATE KEY-----"
+    },
+    {
+        "id": "S5",
+        "name": "PGP private key block",
+        "confidence": 9,
+        "pattern": "-----BEGIN PGP PRIVATE KEY BLOCK-----"
+    },
+    {
+        "id": "S7",
+        "name": "Facebook Oauth",
+        "confidence": 9,
+        "pattern": "facebook.*['|\"][0-9a-f]{32}['|\"]"
+    },
+    {
+        "id": "S8",
+        "name": "Twitter Oauth",
+        "confidence": 9,
+        "pattern": "twitter.*['|\"][0-9a-zA-Z]{35,44}['|\"]"
+    },
+    {
+        "id": "S10",
+        "name": "Google Oauth",
+        "confidence": 9,
+        "pattern": "(\"client_secret\":\"[a-zA-Z0-9-_]{24}\")"
+    },
+    {
+        "id": "S12",
+        "name": "Heroku API Key",
+        "confidence": 9,
+        "pattern": "heroku.*[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}"
+    },
+    {
+        "id": "S17",
+        "name": "Slack Webhook",
+        "confidence": 9,
+        "pattern": "https://hooks.slack.com/services/T[a-zA-Z0-9_]+/B[a-zA-Z0-9_]+/[a-zA-Z0-9_]+"
+    },
+    {
+        "id": "S18",
+        "name": "Google (GCP) Service-account",
+        "confidence": 9,
+        "pattern": "\"type\": \"service_account\""
+    },
+    {
+        "id": "S19",
+        "name": "Password in URL",
+        "confidence": 9,
+        "pattern": "://([^.]+):([^.]+)@\\S+",
+        "target_group": 2,
+        "match_rules": {
+            "1": {
+                "pattern": "^[^\\$|{|%](.+)[^\\$|}|%]$"
+            },
+            "2": {
+                "pattern": "^[^\\$|{|%](.+)[^\\$|}|%]$"
+            }
+        }
+    },
+    {
+        "id": "S20",
+        "name": "BAuth",
+        "confidence": 9,
+        "pattern": "Basic @[a-zA-Z0-9+/]+={0,2}"
+    },
+    {
+        "id": "S22",
+        "name": "Tableau PATS",
+        "confidence": 0,
+        "pattern": "\\bpersonalAccessTokenSecret\\b"
+    },
+    {
+        "id": "S23",
+        "name": "Tableau PAT",
+        "confidence": 0,
+        "pattern": "\\bpersonalAccessToken\\b"
+    },
+    {
+        "id": "S25",
+        "name": "Slack App Token",
+        "confidence": 9,
+        "pattern": "xapp-[0-9]+-[A-Za-z0-9_]+-[0-9]+-[a-f0-9]+"
+    },
+    {
+        "id": "S26",
+        "name": "Custom private key",
+        "confidence": 9,
+        "pattern": "-----BEGIN PRIVATE KEY-----[\\S\\s]{15,}?-----END PRIVATE KEY-----"
+    },
+    {
+        "id": "S28",
+        "name": "Suspicious password declaration",
+        "pattern": "\\b(pass|password|pwd|passwd)\\b(\\W+)([A-Za-z0-9]*)\\b",
+        "confidence": 0,
+        "match_rules": {
+            "2": {
+                "pattern": "^\\s*(?:'|:|=)*\\s*$"
+            }
+        },
+        "target_group": 3,
+        "entropy_settings": 3.72
+    },
+    {
+        "id": "S29",
+        "name": "Ansible vault",
+        "confidence": 9,
+        "pattern": "\\$ANSIBLE_VAULT;[0-9]\\.[0-9];AES256"
+    },
+    {
+        "id": "S30",
+        "name": "AWS MWS",
+        "confidence": 9,
+        "applicable_file_patterns": [
+            ".*.txt$"
+        ],
+        "pattern": "amzn\\.mws\\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    }
+    
+]

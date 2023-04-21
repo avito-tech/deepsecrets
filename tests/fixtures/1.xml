@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server rootURL="http://teamcity:8111" uuid="e3ef03e4-1aac-46f7-982f-10434351f18e">
+  <version number="727" />
+  <artifacts maxArtifactSize="300000000" artifact-paths="system/artifacts&#xA;" />
+  <build-settings executionTimeout="0" />
+  <db-compact enabled="true">
+    <scheduler hour="3" minute="0" />
+  </db-compact>
+  <comment-transformation>
+    <transformation-pattern password="TESTSECRET1234" />
+  </comment-transformation>
+  <vcs-settings modification-check-interval="60" quiet-period="60" />
+</server>

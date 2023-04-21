@@ -1,0 +1,14 @@
+[
+    {
+        "id": "S0",
+        "name": "Slack Token",
+        "confidence": 9,
+        "pattern": "xox(?:a|b|p|o|s|r)-(?:\\d+-)+[a-z0-9]+"
+    },
+    {
+        "id": "S1",
+        "name": "RSA private key",
+        "confidence": 9,
+        "pattern": "-----BEGIN RSA PRIVATE KEY-----[\\S\\s]{15,}?-----END RSA PRIVATE KEY-----"
+    }
+]

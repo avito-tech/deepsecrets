@@ -1,0 +1,27 @@
+<%
+  require 'digest/sha1'
+  actual_password = Digest::SHA1.hexdigest [scope['bareos::secret'], @director_password].join('')
+-%>
+Director {                            # define myself
+  Name = "<%= scope['bareos::director'] %>"
+  QueryFile = "/usr/lib/bareos/scripts/query.sql"
+  Maximum Concurrent Jobs = 80
+  Maximum Console Connections = 48
+  Plugin Directory = /usr/lib/bareos/plugins
+  Plugin Names = "python"
+  Password = "<%= actual_password %>"         # Console password
+  Messages = "bareos:messages:daemon"
+  Auditing = yes
+  Optimize For Speed = yes
+}
+
+Catalog {
+  Name = "<%= scope['bareos::catalog'] %>"
+  dbdriver = "postgresql"
+  dbname = "bareos"
+  dbuser = "service_bareos_production_01"
+  dbpassword = "asdfasdf"
+  dbaddress = db19 
+  dbport = 6432
+  Reconnect = yes
+}

@@ -1,0 +1,76 @@
+name = "ab-lol"
+kind = "unknown"
+
+[engine]
+name = "python"
+
+[redis]
+enabled = true
+size = "small"
+version = "4.0"
+
+[env_vars]
+USE_JSON_FORMATTER = "false"
+DEBUG = "false"
+METRICS_ENABLED = "false"
+SENTRY_ENABLED = "false"
+REQUEST_LOGGING_ENABLED = "true"
+HTTPS_ENABLED = "true"
+S3_HOST = "ceph-com.miami.example.com"
+S3_BUCKET = "lol-1234"
+
+
+[envs.prod.env_vars]
+USE_JSON_FORMATTER = "true"
+DEBUG = "false"
+METRICS_ENABLED = "true"
+SENTRY_ENABLED = "true"
+SENTRY_DSN = "http://hello:TESTSECRET1234@sentry.miami.example.com/251"
+AUTH_ENABLED = "true"
+VERTICA_HOST = 'vertica'
+VERTICA_PORT = '5437'
+VSQL_DATABASE = "DWH"
+VSQL_HOST = "vertica.miami.example.com"
+VSQL_PORT = "5437"
+AUTH_CONFIG_URL = 'https://oauth2.example.com/.well-known/openid-configuration'
+CLICKHOUSE_HOSTS="clickhouse-tcp-clickhouse-abcentral-production-rs-rs01.db.example-sd"
+CLICKHOUSE_USER="ab_loader"
+DWH_CLICKHOUSE_HOSTS="clickhouse-tcp-clickhouse-dwh-cs-production-rs-rs01.db.example-sd"
+S3_BUCKET = "configurator-attachments"
+
+
+# CRONS
+[[crons]]
+name = "status_updater"
+enabled = true
+schedule = "*/1 * * * *"
+command = "python /app/scripts/status_updater.py"
+
+name = "scrum-poker"
+description = "Утилита для оценки задач"
+kind = "infrastructure"
+replicas = 1
+
+[engine]
+name = "node"
+version = "12.13"
+size = "small"
+
+[env_vars]
+NODE_ENV = "production"
+SESSION_TTL = "2592"
+SESSION_SECRET = "CHANGE ME PLZ!!!"
+SESSION_COLLECTION = "sessions"
+
+[envs.local.env_vars]
+NODE_ENV = "development"
+BUILD_ENV = "local"
+
+[envs.dev]
+host = "test.host"
+  [envs.dev.env_vars]
+  NODE_ENV = "development"
+  BUILD_ENV = "dev"
+  JIRA_USERNAME = "test-stest"
+  JIRA_PASSWORD = "iufkdhsafhiuwehf8qw4oifjh9w4ioafja"
+  MATTERMOST_BOT_TOKEN = "fjaipu4iwhpfgj8eosiruhjfkea,sjflksea"

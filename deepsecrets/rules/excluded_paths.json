@@ -1,0 +1,126 @@
+[
+    {
+        "name": "Path excluded",
+        "pattern": "\\.git"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*package-lock\\.json.*"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*-requirements.txt"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*Pipfile\\.lock$"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*package.json.*"
+    },
+    {
+        "name": "Images",
+        "pattern": ".*\\.(jpg|png|bmp|gif|tiff)$"
+    },
+    {
+        "name": "Executives",
+        "pattern": ".*\\.(exe|dll)$"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": "vendor/"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*Gopkg\\.lock.*"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": "venv/"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": "requirements.txt$"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*Gopkg\\.lck$"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*Podfile\\.lock$"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": "\\.gitignore"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*xcodeproj.*"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*__snapshots__.*"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": "internal/generated/"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": "npm-shrinkwrap.json"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*composer.json.*"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*brief"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*Godeps\\.json$"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*composer\\.lock.*"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": "src/Generated/"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*yarn\\.lock$"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*node_modules\\/.*"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*symfony\\.lock$"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": "Gopkg.toml"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": "lib/generated/"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*/vendor\\/.*"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*pbxproj$"
+    },
+    {
+        "name": "Path excluded",
+        "pattern": ".*go\\.sum$"
+    }
+]

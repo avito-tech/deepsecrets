@@ -1,0 +1,5 @@
+{
+    "queue": {
+        "connection": "amqp://guest:guest@10.10.11.104:32769/"
+    }
+}
