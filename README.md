@@ -7,6 +7,18 @@ DeepSecrets expands classic regex-search approaches with semantic analysis, dang
 
 DeepSecrets also introduces a new way to find secrets: just use hashed values of your known secrets and get them found plain in your code.
 
+
+## Installation
+
+From Github via pip
+
+`$ pip install git+https://github.com/avito-tech/deepsecrets.git`
+
+From PyPi
+
+`$ pip install deepsecrets`
+
+
 ## Scanning
 The easiest way:
 
