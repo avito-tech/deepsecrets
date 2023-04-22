@@ -24,6 +24,9 @@ classifiers = [
 "Homepage" = "https://github.com/avito-tech/deepsecrets"
 "Bug Tracker" = "https://github.com/avito-tech/deepsecrets/issues"
 
+[tool.poetry.scripts]
+deepsecrets = "deepsecrets:__main__"
+
 
 [tool.poetry.dependencies]
 python = ">=3.9,<=3.11.1"
