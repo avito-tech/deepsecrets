@@ -1,3 +1,4 @@
+from multiprocessing import get_context
 import os
 from abc import abstractmethod, abstractstaticmethod
 from datetime import datetime
@@ -8,7 +9,7 @@ import regex as re
 
 from dotwiz import DotWiz
 
-from deepsecrets import PROFILER_ON, logger
+from deepsecrets import PLATFORM, PROFILER_ON, logger
 from deepsecrets.config import Config
 from deepsecrets.core.model.finding import Finding, FindingMerger
 from deepsecrets.core.model.rules.exlcuded_path import ExcludePathRule
@@ -27,7 +28,10 @@ class ScanMode:
 
     def __init__(self, config: Config, pool_engine: Optional[Any] = None) -> None:
         if pool_engine is None:
-            self.pool_engine = Pool
+            if PLATFORM == 'Darwin':
+                self.pool_engine = get_context('fork').Pool
+            else:
+                self.pool_engine = Pool
         else:
             self.pool_engine = pool_engine
 

@@ -1,5 +1,6 @@
 import logging
 import os
+import platform
 
 MODULE_NAME = 'deepsecrets'
 
@@ -25,3 +26,5 @@ def set_logging_level(level: int) -> None:
 
 PROFILER_ON = False
 BASE_DIR = os.getcwd()
+
+PLATFORM = platform.system()
