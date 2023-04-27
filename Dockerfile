@@ -1,6 +1,7 @@
 FROM python:3.11.1-slim-bullseye
 
 ENV PROJECT_ROOT /app
+WORKDIR $PROJECT_ROOT
 
 RUN apt update && apt install -y gcc g++
 RUN pip install poetry
