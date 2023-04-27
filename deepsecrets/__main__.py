@@ -2,4 +2,5 @@ import sys
 
 from deepsecrets.cli import DeepSecretsCliTool
 
-sys.exit(DeepSecretsCliTool(sys.argv).start())
+if __name__ == '__main__':
+    sys.exit(DeepSecretsCliTool(sys.argv).start())
