@@ -9,7 +9,7 @@ COPY pyproject.toml $PROJECT_ROOT/
 COPY *.lock $PROJECT_ROOT/
 
 RUN poetry config virtualenvs.create false
-# RUN poetry update && poetry install --no-root
+RUN poetry update && poetry install --no-root
 
 COPY . $PROJECT_ROOT
 

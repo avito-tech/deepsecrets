@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "deepsecrets"
-version = "1.0.0"
+version = "1.0.2"
 description = "A better tool for secrets search"
 license = "MIT"
 authors = [
@@ -29,7 +29,7 @@ deepsecrets = "deepsecrets:__main__"
 
 
 [tool.poetry.dependencies]
-python = ">=3.9,<=3.11.1"
+python = ">=3.9,<3.12"
 pydantic = "^1.10.4"
 pyyaml = "^5.4.1"
 pygments = "^2.14.0"
