@@ -63,9 +63,9 @@ class ScanMode:
                     partial(pool_wrapper, bundle, self._per_file_analyzer),
                     self.filepaths,
                 )  # type: ignore
-
-                pool.close()
-                pool.join()  # not calling because of suprusingly big delays
+                
+                # pool.close()
+                # pool.join()  # not calling because of suprusingly big delays
 
             for file_findings in list(per_file_findings):
                 if not file_findings:
