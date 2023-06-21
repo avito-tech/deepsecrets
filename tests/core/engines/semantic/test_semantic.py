@@ -21,6 +21,11 @@ def file_toml_1() -> File:
     path = 'tests/fixtures/1.toml'
     return File(path=path, relative_path=path)
 
+@pytest.fixture(scope='module')
+def file_toml_2() -> File:
+    path = 'tests/fixtures/2.toml'
+    return File(path=path, relative_path=path)
+
 
 
 def test_1_semantic_engine(file: File):
@@ -75,3 +80,18 @@ def test_3_semantic_engine(file_toml_1: File):
     assert len(findings) == 2
     assert findings[0].rules[0].name == 'Var naming'
     assert findings[1].rules[0].name == 'Var naming'
+
+
+
+def test_4_semantic_engine(file_toml_2: File):
+    tokens = LexerTokenizer(deep_token_inspection=True).tokenize(file_toml_2)
+    assert len(tokens) == 11
+
+    engine = SemanticEngine(subengine=None)
+
+    findings = []
+    findings.extend(engine.search(tokens[4]))
+    findings.extend(engine.search(tokens[10]))
+
+    assert len(findings) == 1
+    assert findings[0].rules[0].name == 'Var naming'

@@ -1,0 +1,13 @@
+[env_vars]
+ALLOW_ORIGINS = "*"
+SERVICE_OAUTH = "vhpn6mbsvhpn6mbsvhpn6mbsvhpn6mbs"
+S3_SECRET = "SFRcQOuJllDaDlnL7BhcwbjdYQDkjeM8PDDae0y6"
+S3_URL = "http://test.com"
+STT_KEY = "vhpn6mbsvhpn6mbsvhpn6mbsvhpn6mbsvhpn6mbsvhpn6mbs"
+STT_TIMEOUT = "100"
+STT_URL = "https://api.test.com"
+TTS_KEY = "vhpn6mbsvhpn6mbsvhpn6mbsvhpn6mbsvhpn6mbsvhpn6mbs"
+TTS_TIMEOUT = "50"
+TTS_URL = "http://test1234.com"
+
+KEYLOGGER_KEYS_KEYRING_SUBKEY = "1"

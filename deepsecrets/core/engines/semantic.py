@@ -31,7 +31,7 @@ class SemanticEngine(IEngine):
     name = 'semantic'
     entropy_threshold = 4.15
     dangerous_variable_regex = re.compile(
-        r'(secret|passw|\bpass\b|\btoken\b|\baccess\b|\bpwd\b|rivateke|cesstoke|authkey|\bsecret\b).{0,15}',
+        r'(secret|passw|\bpass\b|\btoken\b|\baccess\b|\bpwd\b|rivateke|cesstoke|authkey|\bsecret\b|\bkey\b).{0,15}',
         re.IGNORECASE,
     )
     useless_value_regex = re.compile(r'^[^A-Za-z0-9]*$|^%.*%$|^\[.*\]$|^{.*}$', re.IGNORECASE)
