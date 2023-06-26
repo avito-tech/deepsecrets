@@ -15,6 +15,11 @@ def file():
     path = 'tests/fixtures/regex_checks.txt'
     return File(path=path, relative_path=path)
 
+@pytest.fixture(scope='module')
+def file_extless():
+    path = 'tests/fixtures/extless-1'
+    return File(path=path, relative_path=path)
+
 
 @pytest.fixture(scope='module')
 def regex_engine():
@@ -51,3 +56,20 @@ def test_1(file: File, regex_engine: RegexEngine):
     assert len(findings) == 9
 
     response = FindingResponse.from_list(findings)
+
+
+def test_extless(file_extless: File, regex_engine: RegexEngine):
+    findings: List[Finding] = []
+    tokens = FullContentTokenizer().tokenize(file_extless)
+    for token in tokens:
+        token_findings = regex_engine.search(token)
+        for finding in token_findings:
+            finding.map_on_file(file=file_extless, relative_start=token.span[0])
+            findings.append(finding)
+
+    for finding in findings:
+        finding.map_on_file(file=file, relative_start=finding.start_pos)
+        finding.choose_final_rule()
+
+    assert len(findings) == 1
+    assert findings[0].rules[0].id == 'S28'

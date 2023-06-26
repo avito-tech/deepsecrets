@@ -119,7 +119,7 @@
     {
         "id": "S28",
         "name": "Suspicious password declaration",
-        "pattern": "\\b(pass|password|pwd|passwd)\\b(\\W+)([A-Za-z0-9]*)\\b",
+        "pattern": "\\b(pass|password|pwd|passwd)\\b(\\W+)([A-Za-z0-9()$]*)\\b",
         "confidence": 0,
         "match_rules": {
             "2": {
