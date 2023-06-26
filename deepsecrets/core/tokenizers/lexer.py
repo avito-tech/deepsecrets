@@ -60,14 +60,31 @@ class LexerTokenizer(Tokenizer):
 
         return content
 
+    def _find_lexer_for_file(self, file: File):
+        lexer = None
+        if file.extension is not None:
+            try:
+                lexer = get_lexer_for_filename(file.path)
+                return lexer
+            except ClassNotFound:
+                pass
+        
+        if file.guessed_extension is not None:
+            try:
+                lexer = get_lexer_for_filename(f'{file.path}.{file.guessed_extension}')
+                return lexer
+            except ClassNotFound:
+                pass
+        
+        return lexer
+
+
+
     def tokenize(self, file: File, post_filter=True) -> List[Token]:
         self.token_stream = ''
         # TODO: don't trust the extension, use 'file' utility ?
-        try:
-            self.lexer = get_lexer_for_filename(file.path)
-        except ClassNotFound:
-            self.lexer = None
 
+        self.lexer = self._find_lexer_for_file(file)
         if not self.lexer:
             return self.tokens
 

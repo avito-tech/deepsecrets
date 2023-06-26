@@ -1,7 +1,9 @@
+from typing import List
 import pytest
 
 from deepsecrets.core.engines.semantic import SemanticEngine
 from deepsecrets.core.model.file import File
+from deepsecrets.core.model.finding import Finding, FindingMerger
 from deepsecrets.core.model.token import SemanticType
 from deepsecrets.core.tokenizers.lexer import LexerTokenizer
 
@@ -26,6 +28,10 @@ def file_toml_2() -> File:
     path = 'tests/fixtures/2.toml'
     return File(path=path, relative_path=path)
 
+@pytest.fixture(scope='module')
+def file_sh_2() -> File:
+    path = 'tests/fixtures/2.sh'
+    return File(path=path, relative_path=path)
 
 
 def test_1_semantic_engine(file: File):
@@ -95,3 +101,23 @@ def test_4_semantic_engine(file_toml_2: File):
 
     assert len(findings) == 1
     assert findings[0].rules[0].name == 'Var naming'
+
+
+def test_5_semantic_engine(file_sh_2: File):
+    tokens = LexerTokenizer(deep_token_inspection=True).tokenize(file_sh_2)
+    assert len(tokens) == 16
+
+    engine = SemanticEngine(subengine=None)
+
+    findings: List[Finding] = []
+    for token in tokens:
+        findings.extend(engine.search(token))
+
+    for finding in findings:
+        finding.map_on_file(file=file_sh_2, relative_start=finding.start_pos)
+        finding.choose_final_rule()
+
+
+    findings = FindingMerger(findings).merge()
+    assert len(findings) == 1
+    assert findings[0].final_rule.name == 'Dangerous condition'

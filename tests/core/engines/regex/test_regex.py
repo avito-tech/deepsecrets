@@ -7,6 +7,7 @@ from deepsecrets.core.model.file import File
 from deepsecrets.core.model.finding import Finding, FindingMerger, FindingResponse
 from deepsecrets.core.rulesets.regex import RegexRulesetBuilder
 from deepsecrets.core.tokenizers.full_content import FullContentTokenizer
+from deepsecrets.core.tokenizers.lexer import LexerTokenizer
 from deepsecrets.core.utils.fs import get_path_inside_package
 
 
@@ -61,6 +62,8 @@ def test_1(file: File, regex_engine: RegexEngine):
 def test_extless(file_extless: File, regex_engine: RegexEngine):
     findings: List[Finding] = []
     tokens = FullContentTokenizer().tokenize(file_extless)
+    tokens_lex = LexerTokenizer(deep_token_inspection=True).tokenize(file_extless)
+
     for token in tokens:
         token_findings = regex_engine.search(token)
         for finding in token_findings:

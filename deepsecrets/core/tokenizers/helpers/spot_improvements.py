@@ -42,6 +42,8 @@ class SpotImprovements:
                 return [current_token]
 
         new_parts = current_token.content.split(':')
+        if new_parts[0] == '' or new_parts[1] == '':
+            return [current_token]
 
         final = []
         for part in new_parts:
