@@ -1,0 +1,109 @@
+{% extends 'labels/base.html' %}
+{% load static %}
+
+{% block contentcss %}
+    <link rel="stylesheet" href="{% static "labels/css/labeling.task.css" %}">
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        {% if session and not user.is_authenticated %}
+            <span id="session">session: {{ session }}</span>
+        {% endif %}
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="card col-9 mt-2">
+                    <div class="card-body">
+                        <h5 class="card-title"><span style="font-weight: normal">Запрос </span>
+                            <a href="https://example.com?q={{ task.query_text }}" target="labeling-queries">
+                                <span>{{ task.query_text }}</span>
+                            </a></h5>
+                        <hr/>
+                        <h5 class="card-title"><a href="https://example.com/{{ task.item_id }}" target="labeling-items">
+                            <span>{{ task.item_title }}</span>
+                        </a></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ task.item_category }}</h6>
+                        {% if task.item_img %}
+                            <img style="display: block; margin: 0 auto;" src="{{ task.item_img }}" alt="item image"/>
+                        {% endif %}
+                        <div class="card-text" style="white-space: pre-line">{{ task.item_description|safe }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div id="submission">
+            <button class="btn btn-success" data-label="2">Подходит</button>
+            <button class="btn btn-secondary" data-label="1">Непонятно</button>
+            <button class="btn btn-danger" data-label="0">Не подходит</button>
+        </div>
+    </footer>
+{% endblock %}
+
+{% block contentjs %}
+    <script>
+        $('#submission').find('button').each(function () {
+            $(this).click(function () {
+                $(this).attr('disabled', 'disabled');
+                {% autoescape off %}
+                    var url = "{% url 'labeling_task_submit' %}";
+                {% endautoescape %}
+                var label = $(this).data('label');
+                var params = {
+                    "project_id": {{ project_id }},
+                    "query_id": {{ task.query_id }},
+                    "item_id": {{ task.item_id }},
+                    "label": label
+                };
+                $.post(url, params, function (data, status) {
+                    ShowNext()
+                });
+            })
+        });
+
+        function ShowNext() {
+            {% autoescape off %}
+                var url = "{% url 'labeling_task' %}?project_id={{ project_id }}";
+            {% endautoescape %}
+            {% if steps_back %}
+                var steps_back = {{ steps_back }};
+                url = url + '&steps_back=' + (steps_back - 1);
+            {% endif %}
+            window.location.href = url;
+        }
+
+        function ShowPrevious() {
+            {% autoescape off %}
+                var url = "{% url 'labeling_task' %}?project_id={{ project_id }}";
+            {% endautoescape %}
+            var steps_back = 0;
+            {% if steps_back %}
+                steps_back = {{ steps_back }};
+            {% endif %}
+            url = url + '&steps_back=' + (steps_back + 1);
+            window.location.href = url;
+        }
+
+        $(window).keydown(function (e) {
+            if (e.key === '1') {
+                $('#submission .btn-success').click();
+            } else if (e.key === '2') {
+                $('#submission .btn-secondary').click();
+            } else if (e.key === '3') {
+                $('#submission .btn-danger').click();
+            } else if (e.key === ',' && e.metaKey && e.shiftKey) {
+                ShowPrevious();
+            } else if (e.key === 'ArrowLeft' && e.ctrlKey && e.shiftKey) {
+                ShowPrevious();
+            } else if (e.key === '.' && e.metaKey && e.shiftKey) {
+                ShowNext();
+            } else if (e.key === 'ArrowRight' && e.ctrlKey && e.shiftKey) {
+                ShowNext();
+            } else {
+                return
+            }
+            $(window).off('keydown');
+        });
+    </script>
+{% endblock %}

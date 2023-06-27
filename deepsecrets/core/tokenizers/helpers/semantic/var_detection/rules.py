@@ -102,7 +102,11 @@ class VariableDetectionRules:
         VaribleDetector(
             language=Language.ANY,
             stream_pattern=re.compile('(v|n)(p|o)(L)'),
-            match_rules={2: Match(values=[':', '='])},
+            match_rules={
+                2: Match(values=[
+                    re.compile('^:$'),
+                    re.compile('^=$'),
+                ])},
             match_semantics={1: 'name', 3: 'value'},
         ),
         VaribleDetector(

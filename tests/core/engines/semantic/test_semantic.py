@@ -33,6 +33,11 @@ def file_sh_2() -> File:
     path = 'tests/fixtures/2.sh'
     return File(path=path, relative_path=path)
 
+@pytest.fixture(scope='module')
+def file_html_1() -> File:
+    path = 'tests/fixtures/1.html'
+    return File(path=path, relative_path=path)
+
 
 def test_1_semantic_engine(file: File):
     tokens = LexerTokenizer(deep_token_inspection=True).tokenize(file)
@@ -121,3 +126,22 @@ def test_5_semantic_engine(file_sh_2: File):
     findings = FindingMerger(findings).merge()
     assert len(findings) == 1
     assert findings[0].final_rule.name == 'Dangerous condition'
+
+
+def test_6_semantic_engine(file_html_1: File):
+    tokens = LexerTokenizer(deep_token_inspection=True).tokenize(file_html_1)
+    #assert len(tokens) == 16
+
+    engine = SemanticEngine(subengine=None)
+
+    findings: List[Finding] = []
+    for token in tokens:
+        findings.extend(engine.search(token))
+
+    for finding in findings:
+        finding.map_on_file(file=file_html_1, relative_start=finding.start_pos)
+        finding.choose_final_rule()
+
+
+    findings = FindingMerger(findings).merge()
+    assert len(findings) == 0
