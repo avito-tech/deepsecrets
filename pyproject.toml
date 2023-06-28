@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "deepsecrets"
-version = "1.0.6"
+version = "1.1.0"
 description = "A better tool for secrets search"
 license = "MIT"
 authors = [
@@ -37,6 +37,8 @@ ordered-set = "^4.1.0"
 dotwiz = "^0.4.0"
 mmh3 = "^3.0.0"
 regex = "^2023.3.23"
+jsx-lexer = "^2.0.1"
+aenum = "^3.1.15"
 
 
 [tool.poetry.group.test.dependencies]

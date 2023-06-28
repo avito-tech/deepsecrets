@@ -48,8 +48,8 @@ def file_go_7():
 
 def test_1(file_go_1):
     lex = LexerTokenizer(deep_token_inspection=True)
-    lex.tokenize(file_go_1, post_filter=False)
-    variables = lex.get_variables()
+    tokens = lex.tokenize(file_go_1, post_filter=False)
+    variables = lex.get_variables(tokens)
     assert len(variables) == 64
 
 

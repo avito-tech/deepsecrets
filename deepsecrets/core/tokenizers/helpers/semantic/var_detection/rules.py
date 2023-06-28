@@ -2,7 +2,8 @@ import regex as re
 from typing import List
 
 from deepsecrets.core.tokenizers.helpers.semantic.language import Language
-from deepsecrets.core.tokenizers.helpers.semantic.var_detection.detector import Match, VaribleDetector
+from deepsecrets.core.tokenizers.helpers.semantic.var_detection.detector import Match, VaribleDetector, VaribleSuppressor
+from pygments.token import Token as PygmentsToken
 
 
 class VariableDetectionRules:
@@ -158,3 +159,24 @@ class VariableDetectionRules:
     @classmethod
     def for_language(cls, language: Language) -> List[VaribleDetector]:
         return list(filter(lambda x: x.language in [language, Language.ANY], cls.rules))
+
+
+class VariableSuppressionRules(VariableDetectionRules):
+    rules=[
+        VaribleSuppressor(
+            language=Language.JS,
+            stream_pattern=re.compile('(p)(n).*?p(p)'),
+            match_rules={
+                1: Match(values=[
+                    re.compile('^<$'),
+                ]),
+                2: Match(
+                    types=[PygmentsToken.Name.Tag]
+                ),
+                3: Match(values=[
+                    re.compile('^>$'),
+                ]),
+            },
+            match_semantics={}
+        )
+    ]
