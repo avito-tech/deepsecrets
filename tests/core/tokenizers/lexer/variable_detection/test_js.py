@@ -13,6 +13,7 @@ def file_js_3():
 def test_1(file_js_3):
     lex = LexerTokenizer(deep_token_inspection=True)
     tokens = lex.tokenize(file_js_3, post_filter=True)
+    assert lex.lexer.name == 'react'
 
     variables = lex.get_variables(tokens)
     assert len(variables) == 5

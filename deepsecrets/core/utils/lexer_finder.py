@@ -97,6 +97,11 @@ class LexerFinder:
         
 
 def _probe_react(file: File):
-    if 'import React' in file.content:
+    # very simple approach at the moment
+    evidences = [
+        'import React',
+        'ReactDOM',
+    ]
+    if any(evidence in file.content for evidence in evidences):
         return 'react'
     return None
