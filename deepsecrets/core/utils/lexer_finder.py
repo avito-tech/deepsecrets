@@ -86,14 +86,12 @@ class LexerFinder:
     def _projected_filename(self):
         filename = self.file.name
         if self.extension is not None:
-            filename += f'.{self.file.extension}'
+            filename += f'.{self.extension}'
         
         return filename
     
     def _try_find(self):
         pass
-        
-
         
 
 def _probe_react(file: File):
