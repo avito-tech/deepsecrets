@@ -17,11 +17,13 @@ class Config:
     rulesets: Dict[Type, List[str]] = {}
     global_exclusion_paths: List[str] = []
     output: Output
+    return_code_if_findings: bool
 
     def __init__(self) -> None:
         self.engines = []
         self.rulesets = {}
         self.global_exclusion_paths = []
+        self.return_code_if_findings = False
 
     def _set_path(self, path: str, field: str) -> None:
         if not path_exists(path):

@@ -17,6 +17,7 @@ from deepsecrets.core.utils.fs import get_abspath, get_path_inside_package
 from deepsecrets.scan_modes.cli import CliScanMode
 
 DISABLED = 'disabled'
+FINDINGS_FOUND_RETURN_CODE = 66
 
 
 class DeepSecretsCliTool:
@@ -106,6 +107,12 @@ class DeepSecretsCliTool:
             help='Verbose mode',
         )
 
+        parser.add_argument(
+            '--reflect-findings-in-return-code',
+            action='store_true',
+            help='Return code 66 if any findings were found during scan',
+        )
+
         parser.add_argument('--outfile', required=True, type=str)
         parser.add_argument('--outformat', default='json', type=str, choices=['json'])
         self.argparser = parser
@@ -121,9 +128,12 @@ class DeepSecretsCliTool:
         self.config.set_workdir(user_args.target_dir)
         self.config.output = Output(type=user_args.outformat, path=user_args.outfile)
 
+        if user_args.reflect_findings_in_return_code:
+            self.config.return_code_if_findings = True
+
         EXCLUDE_PATHS_BUILTIN = get_path_inside_package('rules/excluded_paths.json')
         if user_args.excluded_paths is not None:
-            rules = [rule.replace('built-in', EXCLUDE_PATHS_BUILTIN) for rule in user_args.regex_rules]
+            rules = [rule.replace('built-in', EXCLUDE_PATHS_BUILTIN) for rule in user_args.excluded_paths]
             self.config.set_global_exclusion_paths(rules)
 
         self.config.engines = []
@@ -167,3 +177,6 @@ class DeepSecretsCliTool:
             json.dump(FindingResponse.from_list(findings), f)
 
         logger.info('Done')
+
+        if len(findings) > 0 and self.config.return_code_if_findings:
+            sys.exit(FINDINGS_FOUND_RETURN_CODE)
