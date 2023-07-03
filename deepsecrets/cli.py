@@ -192,4 +192,4 @@ class DeepSecretsCliTool:
         logger.info('Done')
 
         if len(findings) > 0 and self.config.return_code_if_findings:
-            sys.exit(FINDINGS_FOUND_RETURN_CODE)
+            sys.exit(FINDINGS_DETECTED_RETURN_CODE)
