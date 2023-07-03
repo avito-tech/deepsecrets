@@ -23,6 +23,7 @@ class CpuHelper:
         quota = 1
         period = -1
 
+	    # cgroup 2: https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html
         if path_exists(CGROUP_2_MAX):
             try:
                 quota, period = self.__cgroup2()
@@ -30,6 +31,7 @@ class CpuHelper:
             except Exception:
                 pass
 
+        # cgroup 1: https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/index.html
         if path_exists(QUOTA_FILE) and path_exists(PERIOD_FILE):
             try:
                 quota, period = self.__cgroup1()
