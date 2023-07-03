@@ -17,7 +17,7 @@ from deepsecrets.core.utils.fs import get_abspath, get_path_inside_package
 from deepsecrets.scan_modes.cli import CliScanMode
 
 DISABLED = 'disabled'
-FINDINGS_FOUND_RETURN_CODE = 66
+FINDINGS_DETECTED_RETURN_CODE = 66
 
 
 class DeepSecretsCliTool:
@@ -32,7 +32,7 @@ class DeepSecretsCliTool:
         logger.info('')
         logger.info(f' {bar*20} DeepSecrets {bar*20}')
         logger.info(f'  A better tool for secrets search')
-        logger.info('  version 1.0')
+        logger.info('  version 1.1')
         logger.info(f'')
 
     def _build_argparser(self) -> None:
@@ -110,7 +110,16 @@ class DeepSecretsCliTool:
         parser.add_argument(
             '--reflect-findings-in-return-code',
             action='store_true',
-            help='Return code 66 if any findings were found during scan',
+            help='Return code of 66 if any findings are detected during scan',
+        )
+
+        parser.add_argument(
+            '--process-count',
+            type=int,
+            default=0,
+            help='Number of processes in a pool for file analysis (one process per file)\n'
+            'Default: number of processor cores of your machine or cpu limit of your container from cgroup.\n'
+            'If all checks are failed the fallback value is 4'
         )
 
         parser.add_argument('--outfile', required=True, type=str)
@@ -126,6 +135,7 @@ class DeepSecretsCliTool:
 
         self.config = Config()
         self.config.set_workdir(user_args.target_dir)
+        self.config.set_process_count(user_args.process_count)
         self.config.output = Output(type=user_args.outformat, path=user_args.outfile)
 
         if user_args.reflect_findings_in_return_code:
@@ -164,7 +174,10 @@ class DeepSecretsCliTool:
             logger.error(e)
             sys.exit(1)
 
-        logger.info(f'Starting scan against {self.config.workdir_path}...')
+        logger.info(f'Starting scan against {self.config.workdir_path} using {self.config.process_count} processes...')
+        if self.config.return_code_if_findings is True:
+            logger.info(f'[!] The tool will return code of {FINDINGS_DETECTED_RETURN_CODE} if any findings are detected\n')
+
         logger.info(80 * '=')
         findings: List[Finding] = CliScanMode(config=self.config).run()
         logger.info(80 * '=')

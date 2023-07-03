@@ -1,10 +1,12 @@
 from typing import Dict, List, Type
 
 from pydantic import BaseModel
+from deepsecrets.core.utils.cpu import CpuHelper
 
 from deepsecrets.core.utils.exceptions import FileNotFoundException
 from deepsecrets.core.utils.fs import get_abspath, path_exists
 
+FALLBACK_PROCESS_COUNT = 4
 
 class Output(BaseModel):
     type: str
@@ -17,6 +19,7 @@ class Config:
     rulesets: Dict[Type, List[str]] = {}
     global_exclusion_paths: List[str] = []
     output: Output
+    process_count: int
     return_code_if_findings: bool
 
     def __init__(self) -> None:
@@ -24,6 +27,8 @@ class Config:
         self.rulesets = {}
         self.global_exclusion_paths = []
         self.return_code_if_findings = False
+        # equals to CPU count
+        self.process_count = 0
 
     def _set_path(self, path: str, field: str) -> None:
         if not path_exists(path):
@@ -32,6 +37,19 @@ class Config:
 
     def set_workdir(self, path: str) -> None:
         self._set_path(path, 'workdir_path')
+    
+    def set_process_count(self, count: int):
+        if count > 0:
+            self.process_count = count
+            return
+        
+        count = CpuHelper().get_limit()
+        if count > 0:
+            self.process_count = count
+            return
+        
+        self.process_count = FALLBACK_PROCESS_COUNT
+
 
     def set_global_exclusion_paths(self, paths: List[str]) -> None:
         for path in paths:

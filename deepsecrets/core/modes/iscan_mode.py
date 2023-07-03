@@ -40,11 +40,12 @@ class ScanMode:
         self.prepare_for_scan()
 
     def _get_process_count_for_runner(self) -> int:
-        base = 15
+        limit = self.config.process_count
+        
         file_count = len(self.filepaths)
         if file_count == 0:
             return 0
-        return base if file_count >= base else file_count
+        return limit if file_count >= limit else file_count
 
     def run(self) -> List[Finding]:
         final: List[Finding] = []
@@ -64,9 +65,6 @@ class ScanMode:
                     self.filepaths,
                 )  # type: ignore
                 
-                # pool.close()
-                # pool.join()  # not calling because of suprusingly big delays
-
             for file_findings in list(per_file_findings):
                 if not file_findings:
                     continue
