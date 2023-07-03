@@ -28,7 +28,7 @@ class Config:
         self.global_exclusion_paths = []
         self.return_code_if_findings = False
         # equals to CPU count
-        self.process_count = 0
+        self.process_count = FALLBACK_PROCESS_COUNT
 
     def _set_path(self, path: str, field: str) -> None:
         if not path_exists(path):
