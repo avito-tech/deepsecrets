@@ -343,6 +343,32 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "ply"
+version = "3.11"
+description = "Python Lex & Yacc"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ply-3.11-py2.py3-none-any.whl", hash = "sha256:096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce"},
+    {file = "ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"},
+]
+
+[[package]]
+name = "puppetparser"
+version = "0.2.0"
+description = "A parser from Puppet to an object model"
+category = "main"
+optional = false
+python-versions = ">=3.9, <4"
+files = [
+    {file = "puppetparser-0.2.0.tar.gz", hash = "sha256:8beb861bea33fe67c067b2c4d8f7134a57b83f729b5289f3a35d31e8a93d89a3"},
+]
+
+[package.dependencies]
+ply = "*"
+
+[[package]]
 name = "pydantic"
 version = "1.10.7"
 description = "Data validation and settings management using python type hints"
@@ -614,4 +640,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "db3461b448c7afd660fb696592713ade290d40cd41639908ac8bfa83b087ba7d"
+content-hash = "49e1c854d4e3ec9b0edd25d955e23d09a11aab819336cafb7fbd4a25b4260c2a"
