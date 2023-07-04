@@ -48,16 +48,16 @@ def file_go_7():
 
 def test_1(file_go_1):
     lex = LexerTokenizer(deep_token_inspection=True)
-    lex.tokenize(file_go_1, post_filter=False)
-    variables = lex.get_variables()
-    assert len(variables) == 64
+    tokens = lex.tokenize(file_go_1, post_filter=False)
+    variables = lex.get_variables(tokens)
+    assert len(variables) == 65
 
 
 def test_2(file_go_2):
     lex = LexerTokenizer(deep_token_inspection=True)
     lex.tokenize(file_go_2, post_filter=False)
     variables = lex.get_variables()
-    assert len(variables) == 87
+    assert len(variables) == 86
 
 
 def test_3(file_go_3):
@@ -71,7 +71,7 @@ def test_4(file_go_4):
     lex = LexerTokenizer(deep_token_inspection=True)
     lex.tokenize(file_go_4, post_filter=False)
     variables = lex.get_variables()
-    assert len(variables) == 3
+    assert len(variables) == 2
 
 
 def test_5(file_go_5):

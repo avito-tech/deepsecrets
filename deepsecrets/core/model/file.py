@@ -3,7 +3,6 @@ from typing import Dict, Optional, Tuple
 
 from deepsecrets import logger
 from deepsecrets.core.utils.fs import get_abspath
-from deepsecrets.core.utils.guess_filetype import FileTypeGuesser
 
 
 class File:
@@ -14,8 +13,8 @@ class File:
     line_offsets: Dict[int, Tuple[int, int]] = {}
     line_contents_cache: Dict[int, str] = {}
     empty: bool
+    name: str
     extension: Optional[str]
-    guessed_extension: Optional[str]
 
     def __init__(
         self,
@@ -42,10 +41,8 @@ class File:
 
         self.length = len(self.content)
 
+        self.name = self._get_name()
         self.extension = self._get_extension()
-        if self.extension is None:
-            self.guessed_extension = self._try_guess_extension()
-
         self.empty = True if self.length == 0 else False
 
         if offsets is not None:
@@ -54,15 +51,17 @@ class File:
         if not self.empty and len(self.line_offsets) == 0:
             self._calc_offsets()
 
+    def _get_name(self) -> str:
+        by_slash = self.path.split('/')
+        return by_slash[-1].split('.')[0]
+
+
     def _get_extension(self) -> Optional[str]:
         by_dot = self.path.split('.')
         if len(by_dot) == 1:
             return None
 
         return by_dot[-1]
-    
-    def _try_guess_extension(self) -> Optional[str]:
-        return FileTypeGuesser().guess(self.content)
 
     def _calc_offsets(self) -> None:
         line_breaks = [i.start() for i in re.finditer('\n', self.content)]

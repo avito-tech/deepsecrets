@@ -1,11 +1,11 @@
-from enum import Enum
+from aenum import MultiValueEnum
 
 
-class Language(Enum):
+class Language(MultiValueEnum):
     PYTHON = 'py'
     GOLANG = 'go'
     PHP = 'php'
-    JS = 'js'
+    JS = 'js','jsx'
     TOML = 'toml'
     JSON = 'json'
     YAML = 'yaml'

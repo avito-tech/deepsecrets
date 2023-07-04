@@ -1,5 +1,5 @@
 import regex as re
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field, validator
 
@@ -8,25 +8,63 @@ from deepsecrets.core.tokenizers.helpers.semantic.language import Language
 
 
 class Match(BaseModel):
+    types: List[Any] = Field(default_factory=list)
     values: List[re.Pattern] = Field(default_factory=list)
     not_values: List[re.Pattern] = Field(default_factory=list)
 
     def check(self, tokens: List[Token]) -> bool:
-        if len(self.values) > 0:
-            matched = False
-            for token in tokens:
-                for pattern in self.values:
-                    if re.match(pattern, token.content) is not None:
-                        matched = True
-            if not matched:
-                return False
+        
+        types_match = self._check_types(tokens)
+        values_match = self._check_values(tokens)
+        not_values_match = self._check_not_values(tokens)
 
-        if len(self.not_values) > 0:
-            for token in tokens:
-                for pattern in self.not_values:
-                    if re.match(pattern, token.content) is not None:
-                        return False
+        if not types_match:
+            return False
+        
+        if not values_match:
+            return False 
+        
+        if not_values_match:
+            return False
+
         return True
+
+    
+
+    def _check_types(self, tokens):
+        if len(self.types) == 0:
+            return True # should match any type
+        
+        for token in tokens:
+            if token.type[0] in self.types:
+                return True
+
+
+    def _check_values(self, tokens):
+        if len(self.values) == 0:
+            return True # should match any value
+        
+        for token in tokens:
+            for pattern in self.values:
+                if re.match(pattern, token.content) is not None:
+                    return True
+        return False
+    
+
+    def _check_not_values(self, tokens):
+        if len(self.not_values) == 0:
+            return False
+        
+        for token in tokens:
+            for pattern in self.not_values:
+                if re.match(pattern, token.content) is not None:
+                    return True
+        return False     
+            
+
+
+
+
 
     @validator('values', 'not_values', pre=True)
     def regexify_values(cls, values: Dict) -> List[re.Pattern]:
@@ -71,6 +109,7 @@ class VaribleDetector(BaseModel):
             for i, name in self.match_semantics.items():
                 setattr(var, name, tokens[match.span(i)[0]])
             var.found_by = self
+            var.span = [match.span(0)[0], match.span(0)[1]]
 
             true_detections.append(var)
 
@@ -85,6 +124,18 @@ class VaribleDetector(BaseModel):
                 return False
 
         return True
+
+
+class VaribleSuppressor(VaribleDetector):
+
+    def match(self, tokens: List[Token], token_stream: str) -> List['Variable']:
+        detections = super().match(tokens, token_stream)
+        spans = []
+        for detection in detections:
+            spans.append(detection.span)
+        
+        return spans
+    
 
 
 from deepsecrets.core.model.semantic import Variable

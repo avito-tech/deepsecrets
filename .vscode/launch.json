@@ -25,7 +25,8 @@
                 "/app/tests/fixtures/",
                 "--outfile",
                 "./fdsafad.json",
-                "--verbose"
+                "--verbose",
+                "--reflect-findings-in-return-code"
             ],
             "justMyCode": true
         },

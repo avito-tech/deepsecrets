@@ -1,18 +1,18 @@
-from typing import List, Sequence, Set, Type, Union
+from typing import List, Optional, Sequence, Set, Type, Union
+
+from deepsecrets import logger
 
 from ordered_set import OrderedSet
 from pygments import highlight
 from pygments.formatters import RawTokenFormatter
-from pygments.lexers import get_lexer_for_filename
 from pygments.lexers.special import Lexer, RawTokenLexer
 from pygments.token import Token as PygmentsToken
-from pygments.util import ClassNotFound
 
 from deepsecrets.core.model.file import File
 from deepsecrets.core.model.semantic import Variable
 from deepsecrets.core.model.token import Semantic, SemanticType, Token
 from deepsecrets.core.tokenizers.helpers.semantic.language import Language
-from deepsecrets.core.tokenizers.helpers.semantic.var_detection.rules import VariableDetectionRules
+from deepsecrets.core.tokenizers.helpers.semantic.var_detection.rules import VariableDetectionRules, VariableSuppressionRules
 from deepsecrets.core.tokenizers.helpers.spot_improvements import SpotImprovements
 from deepsecrets.core.tokenizers.helpers.type_stream import (
     token_to_typestream_item,
@@ -20,6 +20,7 @@ from deepsecrets.core.tokenizers.helpers.type_stream import (
     types_to_filter_before,
 )
 from deepsecrets.core.tokenizers.itokenizer import Tokenizer
+from deepsecrets.core.utils.lexer_finder import LexerFinder
 
 empty_tokens = ['\n', '\t', "'", "''", '"', '""']
 
@@ -61,23 +62,10 @@ class LexerTokenizer(Tokenizer):
         return content
 
     def _find_lexer_for_file(self, file: File):
-        lexer = None
-        if file.extension is not None:
-            try:
-                lexer = get_lexer_for_filename(file.path)
-                return lexer
-            except ClassNotFound:
-                pass
-        
-        if file.guessed_extension is not None:
-            try:
-                lexer = get_lexer_for_filename(f'{file.path}.{file.guessed_extension}')
-                return lexer
-            except ClassNotFound:
-                pass
-        
+        lexer = LexerFinder().find(file=file)
+        if lexer is not None and lexer.name == 'Text only':
+            return None
         return lexer
-
 
 
     def tokenize(self, file: File, post_filter=True) -> List[Token]:
@@ -90,8 +78,10 @@ class LexerTokenizer(Tokenizer):
 
         try:
             self.language: Language = Language.from_text(self.lexer.filenames[0])
-        except ValueError:
+        except (ValueError, IndexError):
             self.language: Language = Language.from_text(file.extension)
+        except Exception as e:
+            logger.exception(e)
 
         result = highlight(file.content, self.lexer, RawTokenFormatter())
         raw_tokens = list(RawTokenLexer().get_tokens(result))
@@ -145,7 +135,7 @@ class LexerTokenizer(Tokenizer):
             if any(type in token.type for type in types_to_filter_after):  # type: ignore
                 continue
 
-            if token.content in empty_tokens:
+            if token.content.replace(' ', '') in empty_tokens:
                 continue
 
             final.append(token)
@@ -160,11 +150,24 @@ class LexerTokenizer(Tokenizer):
         exclude_after = set()
 
         true_detections: List[Variable] = []
-        rules = VariableDetectionRules.for_language(self.language)
-        for rule in rules:
+        suppression_regions: List[List[int]] = []
+        
+        detection_rules = VariableDetectionRules.for_language(self.language)
+        suppression_rules = VariableSuppressionRules.for_language(self.language)
+    
+        for rule in detection_rules:
             true_detections.extend(rule.match(self.tokens, self.token_stream))
+        
+        for rule in suppression_rules:
+            suppression_regions.extend(rule.match(self.tokens, self.token_stream))
+
 
         for var in true_detections:
+            for reg in suppression_regions:
+                if var.span[0] >= reg[0] and var.span[1] <= reg[1]:
+                    exclude_after.update([var.name, var.value])
+                    continue
+
             var.value.semantic = Semantic(
                 type=SemanticType.VAR,
                 name=var.name.content,
@@ -174,12 +177,13 @@ class LexerTokenizer(Tokenizer):
 
         return exclude_after
 
-    def get_variables(self) -> List[Token]:
+    def get_variables(self, tokens: Optional[List[Token]] = None) -> List[Token]:
+        tokens = tokens if tokens is not None else self.tokens
         vars = []
-        if len(self.tokens) == 0:
+        if len(tokens) == 0:
             return []
 
-        for token in self.tokens:
+        for token in tokens:
             if token.semantic is None:
                 continue
 

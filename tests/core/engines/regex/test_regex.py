@@ -18,7 +18,7 @@ def file():
 
 @pytest.fixture(scope='module')
 def file_extless():
-    path = 'tests/fixtures/extless-1'
+    path = 'tests/fixtures/extless/radius'
     return File(path=path, relative_path=path)
 
 
@@ -71,7 +71,7 @@ def test_extless(file_extless: File, regex_engine: RegexEngine):
             findings.append(finding)
 
     for finding in findings:
-        finding.map_on_file(file=file, relative_start=finding.start_pos)
+        finding.map_on_file(file=file_extless, relative_start=finding.start_pos)
         finding.choose_final_rule()
 
     assert len(findings) == 1
