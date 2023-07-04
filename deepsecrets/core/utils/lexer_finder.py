@@ -89,9 +89,6 @@ class LexerFinder:
             filename += f'.{self.extension}'
         
         return filename
-    
-    def _try_find(self):
-        pass
         
 
 def _probe_react(file: File):
