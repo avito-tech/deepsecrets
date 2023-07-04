@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Any, Dict, List, Type
 
@@ -48,7 +49,8 @@ class CliScanMode(ScanMode):
 
     @staticmethod
     def _per_file_analyzer(bundle, file: Any) -> List[Finding]:
-        logger.debug(f'Starting analysis for {file}')
+        if logger.level == logging.DEBUG:
+            logger.debug(f'Starting analysis for {file}')
 
         results: List[Finding] = []
 
@@ -87,7 +89,7 @@ class CliScanMode(ScanMode):
         try:
             results = file_analyzer.process(threaded=False)
         except Exception as e:
-            logger.error(e)
+            logger.exception(e)
 
         if PROFILER_ON:
             pass

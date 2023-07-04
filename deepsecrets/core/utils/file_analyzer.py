@@ -89,7 +89,7 @@ class FileAnalyzer:
                     processed_values[token.val_hash()] = True
 
             except Exception as e:
-                logger.error('Unable to process token')
+                logger.exception('Unable to process token')
                 continue
 
         return results

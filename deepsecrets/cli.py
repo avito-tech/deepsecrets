@@ -173,7 +173,7 @@ class DeepSecretsCliTool:
         try:
             self.parse_arguments()
         except Exception as e:
-            logger.error(e)
+            logger.exception(e)
             sys.exit(1)
 
         logger.info(f'Starting scan against {self.config.workdir_path} using {self.config.process_count} processes...')

@@ -1,5 +1,7 @@
 from typing import List, Optional, Sequence, Set, Type, Union
 
+from deepsecrets import logger
+
 from ordered_set import OrderedSet
 from pygments import highlight
 from pygments.formatters import RawTokenFormatter
@@ -60,7 +62,10 @@ class LexerTokenizer(Tokenizer):
         return content
 
     def _find_lexer_for_file(self, file: File):
-        return LexerFinder().find(file=file)
+        lexer = LexerFinder().find(file=file)
+        if lexer is not None and lexer.name == 'Text only':
+            return None
+        return lexer
 
 
     def tokenize(self, file: File, post_filter=True) -> List[Token]:
@@ -73,8 +78,10 @@ class LexerTokenizer(Tokenizer):
 
         try:
             self.language: Language = Language.from_text(self.lexer.filenames[0])
-        except ValueError:
+        except (ValueError, IndexError):
             self.language: Language = Language.from_text(file.extension)
+        except Exception as e:
+            logger.exception(e)
 
         result = highlight(file.content, self.lexer, RawTokenFormatter())
         raw_tokens = list(RawTokenLexer().get_tokens(result))

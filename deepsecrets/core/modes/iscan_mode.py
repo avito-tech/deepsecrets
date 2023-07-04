@@ -1,3 +1,4 @@
+import logging
 from multiprocessing import get_context
 import os
 from abc import abstractmethod, abstractstaticmethod
@@ -41,7 +42,7 @@ class ScanMode:
 
     def _get_process_count_for_runner(self) -> int:
         limit = self.config.process_count
-        
+
         file_count = len(self.filepaths)
         if file_count == 0:
             return 0
@@ -57,7 +58,7 @@ class ScanMode:
 
         if PROFILER_ON:
             for file in self.filepaths:
-                final.extend(self._per_file_analyzer(file=file))
+                final.extend(self._per_file_analyzer(file=file, bundle=bundle))
         else:
             with self.pool_engine(processes=proc_count) as pool:
                 per_file_findings: List[List[Finding]] = pool.map(
@@ -110,7 +111,7 @@ class ScanMode:
         return DotWiz(
             workdir=self.config.workdir_path,
             path_exclusion_rules=self.path_exclusion_rules,
-            engines={},
+            engines={}
         )
 
     @abstractstaticmethod
@@ -141,8 +142,10 @@ class ScanMode:
 def pool_wrapper(bundle: DotWiz, runner: Callable, file: str) -> List[Finding]:  # pragma: nocover
     start_ts = datetime.now()
     result = runner(bundle, file)
-    logger.debug(
-        f' ✓ [{file}] {(datetime.now() - start_ts).total_seconds()}s elapsed \t {len(result)} potential findings'
-    )
-    logger.info(f' ✓ [{file}] \t {len(result)} potential findings')
+    if logger.level == logging.DEBUG:
+        logger.debug(
+            f' ✓ [{file}] {(datetime.now() - start_ts).total_seconds()}s elapsed \t {len(result)} potential findings'
+        )
+    else:
+        logger.info(f' ✓ [{file}] \t {len(result)} potential findings')
     return result
