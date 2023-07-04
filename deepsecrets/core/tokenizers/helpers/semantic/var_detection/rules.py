@@ -37,21 +37,23 @@ class VariableDetectionRules:
             language=Language.GOLANG,
             stream_pattern=re.compile('(n)(p)(L)(?:p|\n)?(L)(p)'),
             match_rules={
-                1: Match(values=['Setenv']),
+                1: Match(values=['Setenv', 'Getenv']),
                 2: Match(values=['(']),
                 5: Match(values=[')']),
             },
             match_semantics={3: 'name', 4: 'value'},
         ),
-        VaribleDetector(
+        
+       VaribleDetector(
             language=Language.GOLANG,
-            stream_pattern=re.compile('(n)(?:p|n|u)?(o)(n|p){0,5}(L)'),
+            stream_pattern=re.compile('(n)(?:p|n|u){0,3}?(o).*(n)(p)(L)'),
             match_rules={
-                2: Match(values=[':=']),
-                3: Match(not_values=['Getenv', 'Setenv']),
-            },
-            match_semantics={1: 'name', 4: 'value'},
+               2: Match(values=[':=']),
+               3: Match(not_values=['Getenv', 'Setenv']),
+           },
+            match_semantics={1: 'name', 5: 'value'},
         ),
+
         VaribleDetector(
             language=Language.GOLANG,
             stream_pattern=re.compile('(n)(?:o|p){1,3}(\?|u)p(L)p'),  # noqa
