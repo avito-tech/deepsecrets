@@ -6,6 +6,7 @@ from deepsecrets.core.rulesets.false_findings import FalseFindingsBuilder
 from deepsecrets.core.rulesets.regex import RegexRulesetBuilder
 from deepsecrets.scan_modes.cli import CliScanMode
 
+FP_TO_BE_EXCLUDED = '/app/tests/fixtures/service.postman_collection.json'
 
 @pytest.fixture(scope='module')
 def config():
@@ -20,6 +21,12 @@ def config():
 
 def test_cli_scan_mode(config: Config):
     mode = CliScanMode(config=config)
+    assert FP_TO_BE_EXCLUDED in mode.filepaths
+
+    config.set_global_exclusion_paths(['tests/fixtures/excluded_paths.json'])
+    mode = CliScanMode(config=config)
+    assert FP_TO_BE_EXCLUDED not in mode.filepaths
+
     findings = []
     for file in mode.filepaths:
         findings.extend(mode._per_file_analyzer(mode.analyzer_bundle(), file))
