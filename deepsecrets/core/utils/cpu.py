@@ -27,7 +27,7 @@ class CpuHelper:
         if path_exists(CGROUP_2_MAX):
             try:
                 quota, period = self.__cgroup2()
-                return quota, period
+                return quota // period
             except Exception:
                 pass
 
@@ -35,7 +35,7 @@ class CpuHelper:
         if path_exists(QUOTA_FILE) and path_exists(PERIOD_FILE):
             try:
                 quota, period = self.__cgroup1()
-                return quota, period
+                return quota // period
             except Exception:
                 pass
 
