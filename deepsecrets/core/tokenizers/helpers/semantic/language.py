@@ -15,6 +15,7 @@ class Language(MultiValueEnum):
     CSHARP = 'cs'
     JAVA = 'java'
     KOTLIN = 'kt'
+    SWIFT = 'swift'
 
     ANY = 'any'
     UNKNOWN = 'unknown'

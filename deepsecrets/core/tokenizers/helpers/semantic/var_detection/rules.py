@@ -180,5 +180,21 @@ class VariableSuppressionRules(VariableDetectionRules):
                 ]),
             },
             match_semantics={}
+        ),
+
+        VaribleSuppressor(
+            language=Language.SWIFT,
+            stream_pattern=re.compile('(n)(p)(n)(p)L'),
+            match_rules={
+                1: Match(values=[
+                    re.compile('^decode$'),
+                    re.compile('^decodeIfPresent$'),
+                    re.compile('^unbox$')
+                ]),
+                2: Match(values=[re.compile('^\($')]),
+                3: Match(values=[re.compile('^(key|keyPath)$')]),
+                4: Match(values=[re.compile('^:$')]),
+            },
+            match_semantics={}
         )
     ]
