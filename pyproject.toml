@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "deepsecrets"
-version = "1.1.1"
+version = "1.1.2"
 description = "A better tool for secrets search"
 license = "MIT"
 authors = [
