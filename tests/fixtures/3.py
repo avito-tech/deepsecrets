@@ -3,9 +3,6 @@
 
 from ldap3 import (
     ALL,
-    LEVEL,
-    NTLM,
-    SASL,
     Connection,
     Server,
 )
@@ -16,3 +13,6 @@ c = Connection(s, user='uid=openvpn,ou=services,dc=example,dc=us', password='TES
 c = Connection(s, pwd='2TESTSECRET1234')
 
 c.bind()
+
+if key == 'setuptools':
+    print()

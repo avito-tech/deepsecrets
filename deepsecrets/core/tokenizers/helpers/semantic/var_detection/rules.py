@@ -11,7 +11,10 @@ class VariableDetectionRules:
         VaribleDetector(
             language=Language.PYTHON,
             stream_pattern=re.compile('(n)(o|p)(?:\n?)(L)(?:\n|p|\?)'),  # noqa
-            match_rules={2: Match(values=['=', ':'])},
+            match_rules={2: Match(values=[
+                re.compile('^=$'),
+                re.compile('^:$')
+            ])},
             match_semantics={1: 'name', 3: 'value'},
         ),
         VaribleDetector(
