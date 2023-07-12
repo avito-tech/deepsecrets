@@ -38,6 +38,7 @@ class Match(BaseModel):
         for token in tokens:
             if token.type[0] in self.types:
                 return True
+        return False
 
 
     def _check_values(self, tokens):

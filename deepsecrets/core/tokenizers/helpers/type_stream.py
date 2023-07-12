@@ -38,6 +38,7 @@ acc = {
     PygmentsToken.Name.Tag: 'n',
     PygmentsToken.Name.Constant: 'n',
     PygmentsToken.Name.Attribute: 'n',
+    PygmentsToken.Keyword.Constant: 'k',
     PygmentsToken.Punctuation: 'p',
     PygmentsToken.Punctuation.Indicator: 'p',
     PygmentsToken.Literal: 'L',

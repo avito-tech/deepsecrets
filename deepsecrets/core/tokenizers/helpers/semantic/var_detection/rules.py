@@ -170,16 +170,21 @@ class VariableSuppressionRules(VariableDetectionRules):
     rules=[
         VaribleSuppressor(
             language=Language.JS,
-            stream_pattern=re.compile('(p)(n).*?p(p)'),
+            stream_pattern=re.compile('(p)(n).+?(p)(u|L|\n)'),
             match_rules={
                 1: Match(values=[
                     re.compile('^<$'),
+                    re.compile('^(}|{)$'),
                 ]),
                 2: Match(
-                    types=[PygmentsToken.Name.Tag]
+                    types=[
+                        PygmentsToken.Name.Tag,
+                        PygmentsToken.Name.Attribute
+                    ]
                 ),
                 3: Match(values=[
                     re.compile('^>$'),
+                    re.compile('^(}|{)$'),
                 ]),
             },
             match_semantics={}

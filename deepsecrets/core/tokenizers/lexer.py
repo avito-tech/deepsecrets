@@ -161,6 +161,7 @@ class LexerTokenizer(Tokenizer):
         for rule in suppression_rules:
             suppression_regions.extend(rule.match(self.tokens, self.token_stream))
 
+        suppression_regions = self._collapse_suppression_regions(suppression_regions)
 
         for var in true_detections:
             for reg in suppression_regions:
@@ -196,3 +197,22 @@ class LexerTokenizer(Tokenizer):
 
     def print_token_type_stream(self) -> None:
         print(self.token_stream)
+
+    def _collapse_suppression_regions(self, suppression_regions):
+        regions = []
+        if len(suppression_regions) == 0:
+            return regions
+        
+        for i, reg in enumerate(suppression_regions):
+            if i == 0:
+                regions.append(suppression_regions[0])
+                continue
+            
+            if reg[0] == regions[-1][1]:
+                regions[-1][1] = reg[1]
+            else:
+                regions.append(reg)
+            
+        return regions
+            
+
