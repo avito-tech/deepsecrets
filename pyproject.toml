@@ -31,7 +31,7 @@ deepsecrets = "deepsecrets:__main__"
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
 pydantic = "^1.10.4"
-pyyaml = "^5.4.1"
+pyyaml = "^6.0.0"
 pygments = "^2.14.0"
 ordered-set = "^4.1.0"
 dotwiz = "^0.4.0"

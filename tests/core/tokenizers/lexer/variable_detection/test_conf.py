@@ -26,6 +26,11 @@ def file_yaml_1():
     path = 'tests/fixtures/1.yaml'
     return File(path=path, relative_path=path)
 
+@pytest.fixture(scope='module')
+def file_yml_1():
+    path = 'tests/fixtures/1.yml'
+    return File(path=path, relative_path=path)
+
 
 @pytest.fixture(scope='module')
 def file_ini_1():
@@ -78,9 +83,18 @@ def test_5(file_pp_1):
     variables = lex.get_variables()
     assert len(variables) == 37
 
+
 def test_6(file_json_2_broken):
     lex = LexerTokenizer(deep_token_inspection=True)
     lex.tokenize(file_json_2_broken, post_filter=False)
 
     variables = lex.get_variables()
     assert len(variables) == 6
+
+
+def test_7(file_yml_1):
+    lex = LexerTokenizer(deep_token_inspection=True)
+    lex.tokenize(file_yml_1, post_filter=False)
+
+    variables = lex.get_variables()
+    assert len(variables) == 1

@@ -1,0 +1,1 @@
+<Text key='right' strong>{BRAND_TRANSFER_LOCALE.TRANSFER_TITLES_RIGHT}</Text>
