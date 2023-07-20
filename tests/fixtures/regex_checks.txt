@@ -63,3 +63,4 @@ ftp://login:password@example.com
 amqp://login:$password@example.com
 amqp://login:${password}@example.com
 amqp://login:%password%@example.com
+//	redis://<user>:<password>@<host>:<port>
