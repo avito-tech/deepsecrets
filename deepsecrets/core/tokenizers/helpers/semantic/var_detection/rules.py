@@ -190,6 +190,30 @@ class VariableSuppressionRules(VariableDetectionRules):
             match_semantics={}
         ),
 
+        
+        VaribleSuppressor(
+            language=Language.JS,
+            stream_pattern=re.compile('(n)(o)L.*(?:u|\n)(n)(o)L'),
+            match_rules={
+                1: Match(values=[
+                    re.compile('^key$'),
+                ]),
+                2: Match(values=[
+                    re.compile('^:$'),
+                ]),
+                3: Match(values=[
+                    re.compile('^value$'),
+                ]),
+                4: Match(values=[
+                    re.compile('^:$'),
+                ]),
+            },
+            match_semantics={}
+        ),
+
+
+        
+
         VaribleSuppressor(
             language=Language.SWIFT,
             stream_pattern=re.compile('(n)(p)(n)(p)L'),

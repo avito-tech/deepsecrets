@@ -24,6 +24,12 @@ def file_jsx_3():
     path = 'tests/fixtures/3.jsx'
     return File(path=path, relative_path=path)
 
+@pytest.fixture(scope='module')
+def file_js_4():
+    path = 'tests/fixtures/4.js'
+    return File(path=path, relative_path=path)
+
+
 
 def test_1(file_js_3):
     lex = LexerTokenizer(deep_token_inspection=True)
@@ -56,6 +62,14 @@ def test_4_jsx(file_jsx_3):
     lex = LexerTokenizer(deep_token_inspection=True)
     tokens = lex.tokenize(file_jsx_3, post_filter=True)
     assert lex.lexer.name == 'react'
+
+    variables = lex.get_variables(tokens)
+    assert len(variables) == 0
+
+
+def test_5_js(file_js_4):
+    lex = LexerTokenizer(deep_token_inspection=True)
+    tokens = lex.tokenize(file_js_4, post_filter=True)
 
     variables = lex.get_variables(tokens)
     assert len(variables) == 0
