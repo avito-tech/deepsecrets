@@ -193,7 +193,7 @@ class VariableSuppressionRules(VariableDetectionRules):
         
         VaribleSuppressor(
             language=Language.JS,
-            stream_pattern=re.compile('(n)(o)L.*(?:u|\n)(n)(o)L'),
+            stream_pattern=re.compile('(n)(o)L.{0,4}(?:u|\n)(n)(o)(?:L|u)'),
             match_rules={
                 1: Match(values=[
                     re.compile('^key$'),
