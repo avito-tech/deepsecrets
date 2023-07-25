@@ -52,7 +52,7 @@ class VariableDetectionRules:
             stream_pattern=re.compile('(n)(?:p|n|u){0,3}?(o).*(n)(p)(L)'),
             match_rules={
                2: Match(values=[':=']),
-               3: Match(not_values=['Getenv', 'Setenv']),
+               3: Match(not_values=['Getenv', 'Setenv', 'Format']),
            },
             match_semantics={1: 'name', 5: 'value'},
         ),
@@ -228,5 +228,34 @@ class VariableSuppressionRules(VariableDetectionRules):
                 4: Match(values=[re.compile('^:$')]),
             },
             match_semantics={}
+        ),
+
+
+        VaribleSuppressor(
+            language=Language.GOLANG,
+            stream_pattern=re.compile('(p)(n)(p)L(p)(n)(p).'),
+            match_rules={
+                1: Match(values=[
+                    re.compile('^{$'),
+                ]),
+                2: Match(values=[
+                    re.compile('^key$', re.IGNORECASE),
+                ]),
+                3: Match(values=[
+                    re.compile('^:$'),
+                ]),
+                4: Match(values=[
+                    re.compile('^,$'),
+                ]),
+                5: Match(values=[
+                    re.compile('^value$', re.IGNORECASE),
+                ]),
+                6: Match(values=[
+                    re.compile('^:$'),
+                ]),
+            },
+            match_semantics={}
         )
+
+        
     ]

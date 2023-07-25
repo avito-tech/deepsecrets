@@ -13,3 +13,4 @@ func init() {
 }
 
 claims := struct{ Msg string }{"TESTSECRET1234"}
+key := time.Now().Format("01.02.2006")

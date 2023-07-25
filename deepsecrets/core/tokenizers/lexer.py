@@ -164,10 +164,10 @@ class LexerTokenizer(Tokenizer):
         suppression_regions = self._collapse_suppression_regions(suppression_regions)
 
         for var in true_detections:
-            for reg in suppression_regions:
-                if var.span[0] >= reg[0] and var.span[1] <= reg[1]:
-                    exclude_after.update([var.name, var.value])
-                    continue
+            suppressed = self._if_suppressed(var, suppression_regions)
+            if suppressed:
+                exclude_after.update([var.name, var.value])
+                continue
 
             var.value.semantic = Semantic(
                 type=SemanticType.VAR,
@@ -177,6 +177,13 @@ class LexerTokenizer(Tokenizer):
             exclude_after.add(var.name)
 
         return exclude_after
+    
+    def _if_suppressed(self, var: Variable, regions):
+        for reg in regions:
+            if var.span[0] >= reg[0] and var.span[1] <= reg[1]:
+                return True
+        return False
+
 
     def get_variables(self, tokens: Optional[List[Token]] = None) -> List[Token]:
         tokens = tokens if tokens is not None else self.tokens
