@@ -26,6 +26,13 @@ useless_values = [
     'restore_password',
 ]
 
+var_name_showstoppers = [
+    'public',
+    'path',
+    'location',
+    'field'
+]
+
 
 class SemanticEngine(IEngine):
     name = 'semantic'
@@ -109,7 +116,7 @@ class SemanticEngine(IEngine):
                     )
                 )
 
-        except Exception:
+        except Exception as e:
             logger.error('Problem during Entropy check on token')
 
         return findings
@@ -124,12 +131,28 @@ class SemanticEngine(IEngine):
         if token.semantic.creds_probability == 9:
             return True
 
-        cleaned_up_varname = self.normalize_punctuation(token.semantic.name)
+        cleaned_up_varname, name_parts = self.normalize_punctuation(token.semantic.name)
         badvar = self.dangerous_variable_regex.findall(cleaned_up_varname)
         if len(badvar) == 0:
+            return False
+
+        if any(part in var_name_showstoppers for part in name_parts):
             return False
 
         return True
 
     def normalize_punctuation(self, string: str):
-        return string.replace(' ', '_').replace('-', ' ').replace('_', ' ')
+        normalized = string.replace(' ', '_').replace('-', ' ').replace('_', ' ')
+        parts = self.__camel_case_divide(normalized).split(' ')
+        return normalized.lower(), parts
+
+    def __camel_case_divide(self, string: str):
+        final = ''
+        for i, _ in enumerate(string):
+            final += string[i].lower()
+            if i == len(string) - 1:
+                continue
+
+            if string[i].islower() and string[i+1].isupper():
+                final += ' '
+        return final

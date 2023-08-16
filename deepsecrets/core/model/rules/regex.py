@@ -70,7 +70,7 @@ class RegexRule(Rule):  # type: ignore
                 window = match.string[span[0] : span[1]]
                 if not match_rule.match(window):  # type: ignore
                     match_ok = False
-                    break
+                    return False
 
         if self.entropy_settings is not None:
             span = match.span(self.target_group)

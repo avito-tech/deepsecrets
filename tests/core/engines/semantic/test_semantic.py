@@ -96,13 +96,14 @@ def test_3_semantic_engine(file_toml_1: File):
 
 def test_4_semantic_engine(file_toml_2: File):
     tokens = LexerTokenizer(deep_token_inspection=True).tokenize(file_toml_2)
-    assert len(tokens) == 11
+    assert len(tokens) == 13
 
     engine = SemanticEngine(subengine=None)
 
     findings = []
     findings.extend(engine.search(tokens[4]))
     findings.extend(engine.search(tokens[10]))
+    findings.extend(engine.search(tokens[12]))
 
     assert len(findings) == 1
     assert findings[0].rules[0].name == 'Var naming'

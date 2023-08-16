@@ -11,3 +11,6 @@ TTS_TIMEOUT = "50"
 TTS_URL = "http://test1234.com"
 
 KEYLOGGER_KEYS_KEYRING_SUBKEY = "1"
+
+# should not be detected
+SECRET_KEY_PATH = "/fdsa/fdsa/fdsa"
