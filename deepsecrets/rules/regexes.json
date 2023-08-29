@@ -75,7 +75,7 @@
         "id": "S19",
         "name": "Password in URL",
         "confidence": 9,
-        "pattern": "://([^.]+):([^.]+)@\\S+",
+        "pattern": "://([^.\"]+):([^.\"]+)@\\S+",
         "target_group": 2,
         "match_rules": {
             "2": {

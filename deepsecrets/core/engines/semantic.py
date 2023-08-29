@@ -30,7 +30,8 @@ var_name_showstoppers = [
     'public',
     'path',
     'location',
-    'field'
+    'field',
+    'data'
 ]
 
 
