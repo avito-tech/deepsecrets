@@ -9,6 +9,11 @@ DeepSecrets also introduces a new way to find secrets: just use hashed values of
 
 Under the hood story is in articles here: https://hackernoon.com/modernizing-secrets-scanning-part-1-the-problem 
 
+## Contacts
+
+- Nikolai Khechumov ([@ntoskernel](https://github.com/ntoskernel)) — creator and maintainer
+
+
 ## Mini-FAQ after release :)
 > Pff, is it still regex-based?
 
